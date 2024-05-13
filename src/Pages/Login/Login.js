@@ -36,7 +36,7 @@ function Login({ setIsLoggedIn }) { // Accept setIsLoggedIn as a prop
         localStorage.setItem('token', token);
         localStorage.setItem('userId', user_id);
         setIsLoggedIn(true); // Set isLoggedIn to true
-        navigate('/');
+        navigate('/home');
       } else {
         setLoginError(message); // Set error message state
       }
