@@ -47,12 +47,12 @@ function App() {
         <CssBaseline />
         <CurrentLocationAwareAppBar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/laundry" element={<Laundry />} />
           <Route path="/contact" element={<ContactUs />} />
           {/* Only render login page if user is not logged in */}
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/book/:id" element={<LaundrySlotForm />} />
           <Route path="/tips" element={<Tips />} />
         </Routes>
