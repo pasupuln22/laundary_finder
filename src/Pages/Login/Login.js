@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 
-function Login() {
+function Login({ setIsLoggedIn }) { // Accept setIsLoggedIn as a prop
   const [isSignUpActive, setIsSignUpActive] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,6 +35,7 @@ function Login() {
         const { user_id } = results[0];
         localStorage.setItem('token', token);
         localStorage.setItem('userId', user_id);
+        setIsLoggedIn(true); // Set isLoggedIn to true
         navigate('/');
       } else {
         setLoginError(message); // Set error message state

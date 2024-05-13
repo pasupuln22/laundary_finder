@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +16,8 @@ function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const { isDarkMode } = useDarkMode();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to manage login status
+
   const theme = React.useMemo(
     () =>
       createTheme({
@@ -30,8 +32,8 @@ function App() {
   const CurrentLocationAwareAppBar = () => {
     const location = useLocation();
 
-    // If current location is '/login', don't render the navbar
-    if (location.pathname === '/login') {
+    // If current location is '/login' or user is not logged in, don't render the navbar
+    if (location.pathname === '/login' || !isLoggedIn) {
       return null;
     }
 
@@ -45,11 +47,12 @@ function App() {
         <CssBaseline />
         <CurrentLocationAwareAppBar />
         <Routes>
-          <Route path="/*" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/laundry" element={<Laundry />} />
           <Route path="/contact" element={<ContactUs />} />
-          <Route path="/login" element={<Login />} />
+          {/* Only render login page if user is not logged in */}
+          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/book/:id" element={<LaundrySlotForm />} />
           <Route path="/tips" element={<Tips />} />
         </Routes>

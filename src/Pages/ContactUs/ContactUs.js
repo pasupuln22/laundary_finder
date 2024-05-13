@@ -16,13 +16,17 @@ import {
   DialogContentText,
   DialogActions,
   Link,
+  Alert, // Import Alert component from Material-UI
 } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
+import axios from 'axios'; // Import Axios
 
 import PrivacyPolicy from './PrivacyPolicy';
 
 const ContactUs = () => {
   const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false); // State to manage alert open/close
+  const [alertMessage, setAlertMessage] = useState(''); // State to manage alert message
 
   const handlePrivacyPolicyOpen = () => {
     setOpenPrivacyPolicy(true);
@@ -30,6 +34,39 @@ const ContactUs = () => {
 
   const handlePrivacyPolicyClose = () => {
     setOpenPrivacyPolicy(false);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+  
+    const formData = {
+      name: event.target.elements.name.value,
+      email: event.target.elements.email.value,
+      message: event.target.elements.message.value,
+    };
+  
+    axios.post('http://localhost:3001/contact', formData)
+      .then((response) => {
+        setAlertMessage(response.data.message); // Set success message
+        setAlertOpen(true); // Open alert
+        // Reset alert after 3 seconds
+        setTimeout(() => {
+          setAlertOpen(false);
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error(error); // Log error if request fails
+        setAlertMessage('Failed to submit contact details'); // Set error message
+        setAlertOpen(true); // Open alert
+        // Reset alert after 3 seconds
+        setTimeout(() => {
+          setAlertOpen(false);
+        }, 3000);
+      });
+  };
+
+  const handleAlertClose = () => {
+    setAlertOpen(false);
   };
 
   return (
@@ -45,7 +82,12 @@ const ContactUs = () => {
 
       <Card>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
+            {alertMessage && ( // Display Alert if alertMessage exists
+              <Alert severity="success" onClose={handleAlertClose} open={alertOpen}>
+                {alertMessage}
+              </Alert>
+            )}
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <TextField
